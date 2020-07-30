@@ -54,7 +54,6 @@ public class WordService {
         Word word = new Word();
         word.setText(createModel.getText());
         word.setDescription(createModel.getDescription());
-        word.setLocale(createModel.getLocale());
         wordRepository.createWord(word);
     }
 
@@ -63,16 +62,15 @@ public class WordService {
         word.setId(id);
         word.setText(createModel.getText());
         word.setDescription(createModel.getDescription());
-        word.setLocale(createModel.getLocale());
         wordRepository.updateWordById(word);
     }
 
     private static WordModel mapToWordModel(Word word) {
-        return new WordModel(word.getId(), word.getText(), word.getDescription(), word.getLocale());
+        return new WordModel(word.getId(), word.getText(), word.getDescription());
     }
 
     private static WordModel createEmptyWordModel() {
-        return new WordModel(0, UNKNOWN, UNKNOWN, UNKNOWN);
+        return new WordModel(0, UNKNOWN, UNKNOWN);
     }
 
 }

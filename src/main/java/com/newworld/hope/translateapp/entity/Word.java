@@ -18,9 +18,6 @@ public class Word implements Serializable {
     @Column(name = "description", length = 150)
     private String description;
 
-    @Column(name = "locale", length = 3)
-    private String locale;
-
     public long getId() {
         return id;
     }
@@ -45,11 +42,4 @@ public class Word implements Serializable {
         this.description = description;
     }
 
-    public String getLocale() {
-        return locale;
-    }
-
-    public void setLocale(String locale) {
-        this.locale = locale;
-    }
 }

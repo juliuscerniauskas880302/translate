@@ -4,16 +4,14 @@ public class WordModel {
     private long id;
     private String text;
     private String description;
-    private String locale;
 
     public WordModel() {
     }
 
-    public WordModel(long id, String text, String description, String locale) {
+    public WordModel(long id, String text, String description) {
         this.id = id;
         this.text = text;
         this.description = description;
-        this.locale = locale;
     }
 
     public long getId() {
@@ -26,10 +24,6 @@ public class WordModel {
 
     public String getDescription() {
         return description;
-    }
-
-    public String getLocale() {
-        return locale;
     }
 
 }

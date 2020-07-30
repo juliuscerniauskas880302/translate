@@ -4,12 +4,10 @@ public class WordCreateModel {
 
     private String text;
     private String description;
-    private String locale;
 
-    public WordCreateModel(String text, String description, String locale) {
+    public WordCreateModel(String text, String description) {
         this.text = text;
         this.description = description;
-        this.locale = locale;
     }
 
     public String getText() {
@@ -18,10 +16,6 @@ public class WordCreateModel {
 
     public String getDescription() {
         return description;
-    }
-
-    public String getLocale() {
-        return locale;
     }
 
 }
