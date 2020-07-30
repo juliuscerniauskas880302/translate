@@ -23,4 +23,7 @@ public class Word implements Serializable {
     @Column(name = "description", length = 150)
     private String description;
 
+    @Column(name = "property_name", length = 150)
+    private String propertyName;
+
 }
