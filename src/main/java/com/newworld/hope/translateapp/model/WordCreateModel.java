@@ -1,21 +1,16 @@
 package com.newworld.hope.translateapp.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class WordCreateModel {
 
     private String text;
     private String description;
-
-    public WordCreateModel(String text, String description) {
-        this.text = text;
-        this.description = description;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public String getDescription() {
-        return description;
-    }
+    private String propertyName;
 
 }

@@ -6,6 +6,7 @@ import com.newworld.hope.translateapp.model.WordModel;
 import com.newworld.hope.translateapp.repository.WordRepository;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,12 +18,6 @@ public class WordService {
 
     public WordService(WordRepository wordRepository) {
         this.wordRepository = wordRepository;
-    }
-
-    public String getTextById(long id) {
-        return wordRepository.getWordById(id)
-                .map(Word::getText)
-                .orElse(UNKNOWN);
     }
 
     public WordModel getWordById(long id) {
@@ -38,13 +33,14 @@ public class WordService {
                 .collect(Collectors.toList());
     }
 
-    public WordModel getWordByIdAndLocale(long id, String locale) {
-        return wordRepository.getWordByIdAndLocale(id, locale)
-                .map(WordService::mapToWordModel).orElse(createEmptyWordModel());
+    public WordModel getWordByPropertyName(String propertyName) {
+        return wordRepository.getWordByPropertyName(propertyName)
+                .map(WordService::mapToWordModel)
+                .orElse(createEmptyWordModel());
     }
 
-    public List<WordModel> getAllWordsByLocale(String locale) {
-        return wordRepository.getAllWordsByLocale(locale)
+    public List<WordModel> getWordsByPropertyName(String propertyName) {
+        return wordRepository.getWordsByPropertyName(propertyName)
                 .parallelStream()
                 .map(WordService::mapToWordModel)
                 .collect(Collectors.toList());
@@ -58,19 +54,27 @@ public class WordService {
     }
 
     public void updateWordById(long id, WordCreateModel createModel) {
-        Word word = new Word();
-        word.setId(id);
-        word.setText(createModel.getText());
-        word.setDescription(createModel.getDescription());
-        wordRepository.updateWordById(word);
+        Word persistedWord = wordRepository.getWordById(id).orElseThrow(EntityNotFoundException::new);
+        persistedWord.setText(createModel.getText());
+        persistedWord.setDescription(createModel.getDescription());
+        persistedWord.setPropertyName(createModel.getPropertyName());
+        wordRepository.updateWordById(persistedWord);
+    }
+
+    public void deleteWordById(long id) {
+        wordRepository.deleteWordById(id);
+    }
+
+    public void deleteWordByPropertyName(String propertyName) {
+        wordRepository.deleteWordByPropertyName(propertyName);
     }
 
     private static WordModel mapToWordModel(Word word) {
-        return new WordModel(word.getId(), word.getText(), word.getDescription());
+        return new WordModel(word.getId(), word.getText(), word.getDescription(), word.getPropertyName());
     }
 
     private static WordModel createEmptyWordModel() {
-        return new WordModel(0, UNKNOWN, UNKNOWN);
+        return new WordModel(0, UNKNOWN, UNKNOWN, UNKNOWN);
     }
 
 }
