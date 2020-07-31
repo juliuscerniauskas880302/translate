@@ -3,6 +3,7 @@ package com.newworld.hope.translateapp.controller;
 import com.newworld.hope.translateapp.model.WordCreateModel;
 import com.newworld.hope.translateapp.model.WordModel;
 import com.newworld.hope.translateapp.service.WordService;
+import org.apache.ibatis.annotations.Delete;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,18 +23,18 @@ public class WordController {
         return wordService.getAllWords();
     }
 
-    @GetMapping("/all/{locale}")
-    public List<WordModel> getAllWordsByLocale(@PathVariable String locale) {
-        return wordService.getAllWordsByLocale(locale);
+    @GetMapping("/all/{propertyName}")
+    public List<WordModel> getWordsByPropertyName(@PathVariable("propertyName") final String propertyName) {
+        return wordService.getWordsByPropertyName(propertyName);
     }
 
-    @GetMapping("/{id}/{locale}")
-    public WordModel getWordByIdAndLocale(@PathVariable long id, @PathVariable String locale) {
-        return wordService.getWordByIdAndLocale(id, locale);
+    @GetMapping("/one/{propertyName}")
+    public WordModel getWordByPropertyName(@PathVariable("propertyName") final String propertyName) {
+        return wordService.getWordByPropertyName(propertyName);
     }
 
     @GetMapping("/{id}")
-    public WordModel getWordById(@PathVariable long id) {
+    public WordModel getWordById(@PathVariable("id") final long id) {
         return wordService.getWordById(id);
     }
 
@@ -45,6 +46,16 @@ public class WordController {
     @PutMapping("/{id}")
     public void updateWordById(@PathVariable("id") final long id, @RequestBody final WordCreateModel createModel) {
         wordService.updateWordById(id, createModel);
+    }
+
+    @Delete("/id/{id}")
+    public void deleteWordById(@PathVariable("id") final long id) {
+        wordService.deleteWordById(id);
+    }
+
+    @Delete("/property/{propertyName}")
+    public void deleteWordByPropertyName(@PathVariable("propertyName") final String propertyName) {
+        wordService.deleteWordByPropertyName(propertyName);
     }
 
 }

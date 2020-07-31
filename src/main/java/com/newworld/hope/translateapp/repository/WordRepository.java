@@ -11,23 +11,38 @@ import java.util.Optional;
 @Repository
 public interface WordRepository {
 
-    @Select("SELECT * FROM words WHERE id = #{id}")
-    Optional<Word> getWordById(@Param("id") long id);
-
     @Select("SELECT * FROM words")
     List<Word> getAllWords();
 
-    @Select("SELECT * FROM words WHERE id = #{id} AND locale = #{locale}")
-    Optional<Word> getWordByIdAndLocale(@Param("id") long id, @Param("locale") String locale);
+    @Select("SELECT * FROM words " +
+            "WHERE property_name " +
+            "LIKE '%'#{propertyName}'%'")
+    List<Word> getWordsByPropertyName(@Param("propertyName") final String propertyName);
 
-    @Select("SELECT * FROM words WHERE locale = #{locale}")
-    List<Word> getAllWordsByLocale(@Param("locale") String locale);
+    @Select("SELECT * FROM words " +
+            "WHERE id = #{id}")
+    Optional<Word> getWordById(@Param("id") final long id);
 
-    @Insert("INSERT INTO words(text, description, locale) values(#{text}, #{description}, #{locale})")
+    @Select("SELECT * FROM words " +
+            "WHERE property_name = #{propertyName}")
+    Optional<Word> getWordByPropertyName(@Param("propertyName") final String propertyName);
+
+    @Insert("INSERT INTO words(text, description, property_name) " +
+            "values(#{text}, #{description}, #{propertyName})")
     @SelectKey(statement = "call identity()", keyProperty = "id", before = false, resultType = Long.class)
-    void createWord(Word word);
+    void createWord(final Word word);
 
-    @Update("UPDATE words SET text = #{text}, description = #{description}, locale = #{locale} WHERE id = #{id}")
-    void updateWordById(Word word);
+    @Update("UPDATE words " +
+            "SET text = #{text}, description = #{description}, property_name = #{propertyName} " +
+            "WHERE id = #{id}")
+    void updateWordById(final Word word);
+
+    @Delete("DELETE * FROM words " +
+            "WHERE id = #{id}")
+    void deleteWordById(@Param("id") final long id);
+
+    @Delete("DELETE * FROM words " +
+            "WHERE property_name = #{propertyName}")
+    void deleteWordByPropertyName(@Param("propertyName") final String propertyName);
 
 }

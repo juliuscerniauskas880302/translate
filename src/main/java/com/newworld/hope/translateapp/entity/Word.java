@@ -1,10 +1,15 @@
 package com.newworld.hope.translateapp.entity;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "words")
+@NoArgsConstructor
+@Data
 public class Word implements Serializable {
     private static final long serialVersionUID = -5254443854998426904L;
 
@@ -18,38 +23,7 @@ public class Word implements Serializable {
     @Column(name = "description", length = 150)
     private String description;
 
-    @Column(name = "locale", length = 3)
-    private String locale;
+    @Column(name = "property_name", length = 150)
+    private String propertyName;
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getLocale() {
-        return locale;
-    }
-
-    public void setLocale(String locale) {
-        this.locale = locale;
-    }
 }
