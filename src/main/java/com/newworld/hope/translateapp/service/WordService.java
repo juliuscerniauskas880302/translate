@@ -46,19 +46,27 @@ public class WordService {
                 .collect(Collectors.toList());
     }
 
-    public void createWord(WordCreateModel createModel) {
+    public WordModel createWord(WordCreateModel createModel) {
         Word word = new Word();
         word.setText(createModel.getText());
         word.setDescription(createModel.getDescription());
+        word.setPropertyName(createModel.getPropertyName());
         wordRepository.createWord(word);
+
+        return wordRepository.getWordById(word.getId()).map(WordService::mapToWordModel)
+                .orElse(createEmptyWordModel());
     }
 
-    public void updateWordById(long id, WordCreateModel createModel) {
-        Word persistedWord = wordRepository.getWordById(id).orElseThrow(EntityNotFoundException::new);
+    public WordModel updateWordById(long id, WordCreateModel createModel) {
+        Word persistedWord = wordRepository.getWordById(id)
+                .orElseThrow(EntityNotFoundException::new);
+
         persistedWord.setText(createModel.getText());
         persistedWord.setDescription(createModel.getDescription());
         persistedWord.setPropertyName(createModel.getPropertyName());
         wordRepository.updateWordById(persistedWord);
+
+        return mapToWordModel(persistedWord);
     }
 
     public void deleteWordById(long id) {
