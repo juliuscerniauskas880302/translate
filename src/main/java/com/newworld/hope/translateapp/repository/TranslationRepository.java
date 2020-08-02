@@ -8,28 +8,57 @@ import java.util.List;
 import java.util.Optional;
 
 @Mapper
-@Repository
 public interface TranslationRepository {
 
+    @Results(id = "translation", value = {
+            @Result(property = "id", column = "id", id = true),
+            @Result(property = "wordId", column = "word_id"),
+            @Result(property = "countryCode", column = "country_code"),
+            @Result(property = "translation", column = "translation"),
+    })
     @Select("SELECT * FROM translations")
     List<Translation> getAll();
 
+    @Results(id = "translation", value = {
+            @Result(property = "id", column = "id", id = true),
+            @Result(property = "wordId", column = "word_id"),
+            @Result(property = "countryCode", column = "country_code"),
+            @Result(property = "translation", column = "translation"),
+    })
     @Select("SELECT * FROM translations WHERE country_code = #{countryCode}")
     List<Translation> getAllByCountryCode(@Param("countryCode") final String countryCode);
 
+    @Results(id = "translation", value = {
+            @Result(property = "id", column = "id", id = true),
+            @Result(property = "wordId", column = "word_id"),
+            @Result(property = "countryCode", column = "country_code"),
+            @Result(property = "translation", column = "translation"),
+    })
     @Select("SELECt * FROM translations WHERE word_id = #{wordId}")
     List<Translation> getAllTByWordId(@Param("wordId") final long wordId);
 
+    @Results(id = "translation", value = {
+            @Result(property = "id", column = "id", id = true),
+            @Result(property = "wordId", column = "word_id"),
+            @Result(property = "countryCode", column = "country_code"),
+            @Result(property = "translation", column = "translation"),
+    })
     @Select("SELECT * FROM translations WHERE id = #{id}")
     Optional<Translation> getById(@Param("id") final long id);
 
+    @Results(id = "translation", value = {
+            @Result(property = "id", column = "id", id = true),
+            @Result(property = "wordId", column = "word_id"),
+            @Result(property = "countryCode", column = "country_code"),
+            @Result(property = "translation", column = "translation"),
+    })
     @Select("SELECT * FROM translations WHERE word_id = #{wordId} AND country_code = #{countryCode}")
     Optional<Translation> getByWordIdAndCountryCode(@Param("wordId") final long wordId,
                                                     @Param("countryCode") final String countryCode);
 
     @Insert("INSERT INTO translations(word_id, country_code, translation) " +
             "VALUES(#{wordId}, #{countryCode}, #{translation})")
-    @SelectKey(statement = "call identity()", keyProperty = "id", before = false, resultType = Long.class)
+    @Options(useGeneratedKeys = true, keyColumn = "id", keyProperty = "id")
     void createTranslation(final Translation translation);
 
     @Update("UPDATE translations " +
