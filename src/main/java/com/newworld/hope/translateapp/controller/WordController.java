@@ -38,9 +38,9 @@ public class WordController {
         return wordService.getWordById(id);
     }
 
-    @PostMapping()
-    public void createWord(@RequestBody final WordCreateModel createModel) {
-        wordService.createWord(createModel);
+    @PostMapping(produces = "application/json", consumes = "application/json")
+    public WordModel createWord(@RequestBody final WordCreateModel createModel) {
+        return wordService.createWord(createModel);
     }
 
     @PutMapping("/{id}")
