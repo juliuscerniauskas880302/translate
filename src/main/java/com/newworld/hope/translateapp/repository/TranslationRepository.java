@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Mapper
+@Repository
 public interface TranslationRepository {
 
     @Results(id = "translation", value = {
@@ -34,7 +35,7 @@ public interface TranslationRepository {
             @Result(property = "countryCode", column = "country_code"),
             @Result(property = "translation", column = "translation"),
     })
-    @Select("SELECt * FROM translations WHERE word_id = #{wordId}")
+    @Select("SELECT * FROM translations WHERE word_id = #{wordId}")
     List<Translation> getAllTByWordId(@Param("wordId") final long wordId);
 
     @Results(id = "translation", value = {

@@ -23,38 +23,33 @@ public class TranslationService {
     public List<TranslationModel> getAll() {
         return translationRepository.getAll()
                 .parallelStream()
-                .map(TranslationService::maptToTranslationModel)
+                .map(TranslationService::mapToTranslationModel)
                 .collect(Collectors.toList());
     }
 
     public List<TranslationModel> getAllByCountryCode(final String countryCode) {
         return translationRepository.getAllByCountryCode(countryCode)
                 .parallelStream()
-                .map(TranslationService::maptToTranslationModel)
+                .map(TranslationService::mapToTranslationModel)
+                .collect(Collectors.toList());
+    }
+
+    public List<TranslationModel> getAllTByWordId(final long wordId) {
+        return translationRepository.getAllTByWordId(wordId)
+                .parallelStream()
+                .map(TranslationService::mapToTranslationModel)
                 .collect(Collectors.toList());
     }
 
     public TranslationModel getById(final long id) {
         return translationRepository.getById(id)
-                .map(TranslationService::maptToTranslationModel)
+                .map(TranslationService::mapToTranslationModel)
                 .orElse(createEmptyTranslationModel());
     }
 
     public TranslationModel getByWordIdAndCountryCode(final long wordId, final String countryCode) {
         return translationRepository.getByWordIdAndCountryCode(wordId, countryCode)
-                .map(TranslationService::maptToTranslationModel)
-                .orElse(createEmptyTranslationModel());
-    }
-
-    public TranslationModel maptToTranslationModel(TranslationCreateModel createModel) {
-        Translation translation = new Translation();
-        translation.setWordId(createModel.getWordId());
-        translation.setTranslation(createModel.getTranslation());
-        translation.setCountryCode(createModel.getCountryCode());
-        translationRepository.createTranslation(translation);
-
-        return translationRepository.getById(translation.getId())
-                .map(TranslationService::maptToTranslationModel)
+                .map(TranslationService::mapToTranslationModel)
                 .orElse(createEmptyTranslationModel());
     }
 
@@ -67,14 +62,26 @@ public class TranslationService {
         persistedTranslation.setCountryCode(createModel.getCountryCode());
         translationRepository.updateTranslation(persistedTranslation);
 
-        return maptToTranslationModel(persistedTranslation);
+        return mapToTranslationModel(persistedTranslation);
     }
 
     public void deleteTranslationById(final long translationId) {
         translationRepository.deleteTranslation(translationId);
     }
 
-    private static TranslationModel maptToTranslationModel(Translation translation) {
+    public TranslationModel createTranslation(TranslationCreateModel createModel) {
+        Translation translation = new Translation();
+        translation.setWordId(createModel.getWordId());
+        translation.setTranslation(createModel.getTranslation());
+        translation.setCountryCode(createModel.getCountryCode());
+        translationRepository.createTranslation(translation);
+
+        return translationRepository.getById(translation.getId())
+                .map(TranslationService::mapToTranslationModel)
+                .orElse(createEmptyTranslationModel());
+    }
+
+    private static TranslationModel mapToTranslationModel(Translation translation) {
         TranslationModel translationModel = new TranslationModel();
         translationModel.setId(translation.getId());
         translationModel.setWordId(translation.getWordId());
