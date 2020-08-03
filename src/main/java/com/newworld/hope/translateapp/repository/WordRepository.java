@@ -7,10 +7,16 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+
 @Mapper
-@Repository
 public interface WordRepository {
 
+    @Results(id = "wordById", value = {
+            @Result(property = "id", column = "id", id = true),
+            @Result(property = "text", column = "text"),
+            @Result(property = "description", column = "description"),
+            @Result(property = "propertyName", column = "property_name"),
+    })
     @Select("SELECT * FROM words")
     List<Word> getAllWords();
 
@@ -19,10 +25,22 @@ public interface WordRepository {
             "LIKE '%'#{propertyName}'%'")
     List<Word> getWordsByPropertyName(@Param("propertyName") final String propertyName);
 
+    @Results(id = "wordById", value = {
+            @Result(property = "id", column = "id", id = true),
+            @Result(property = "text", column = "text"),
+            @Result(property = "description", column = "description"),
+            @Result(property = "propertyName", column = "property_name"),
+    })
     @Select("SELECT * FROM words " +
             "WHERE id = #{id}")
     Optional<Word> getWordById(@Param("id") final long id);
 
+    @Results(id = "wordById", value = {
+            @Result(property = "id", column = "id", id = true),
+            @Result(property = "text", column = "text"),
+            @Result(property = "description", column = "description"),
+            @Result(property = "propertyName", column = "property_name"),
+    })
     @Select("SELECT * FROM words " +
             "WHERE property_name = #{propertyName}")
     Optional<Word> getWordByPropertyName(@Param("propertyName") final String propertyName);
