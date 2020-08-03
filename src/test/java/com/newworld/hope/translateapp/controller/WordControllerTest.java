@@ -1,6 +1,6 @@
 package com.newworld.hope.translateapp.controller;
 
-import com.newworld.hope.translateapp.service.WordService;
+import com.newworld.hope.translateapp.service.WordServiceImpl;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.apache.http.entity.ContentType;
@@ -18,7 +18,7 @@ import static org.mockito.Mockito.when;
 class WordControllerTest {
 
     @Mock
-    private WordService wordService;
+    private WordServiceImpl wordServiceImpl;
 
     @InjectMocks
     private WordController wordController;
@@ -31,7 +31,7 @@ class WordControllerTest {
 
     @Test
     public void testGetAllWords() {
-        when(wordService.getAllWords()).thenReturn(Collections.emptyList());
+        when(wordServiceImpl.getAllWords()).thenReturn(Collections.emptyList());
 
         Response response = given()
                 .when()
