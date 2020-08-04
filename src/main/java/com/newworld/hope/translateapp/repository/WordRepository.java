@@ -9,6 +9,7 @@ import java.util.Optional;
 
 
 @Mapper
+@Repository
 public interface WordRepository {
 
     @Results(id = "wordById", value = {

@@ -1,90 +1,22 @@
 package com.newworld.hope.translateapp.service;
 
-import com.newworld.hope.translateapp.entity.Translation;
 import com.newworld.hope.translateapp.model.TranslationCreateModel;
 import com.newworld.hope.translateapp.model.TranslationModel;
-import com.newworld.hope.translateapp.repository.TranslationRepository;
-import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.stream.Collectors;
 
-@Service
-public class TranslationService {
-    private static final String UNKNOWN = "UNKNOWN";
+public interface TranslationService {
+    List<TranslationModel> getAll();
 
-    private TranslationRepository translationRepository;
+    List<TranslationModel> getAllByCountryCode(String countryCode);
 
-    public TranslationService(TranslationRepository translationRepository) {
-        this.translationRepository = translationRepository;
-    }
+    List<TranslationModel> getAllTByWordId(long wordId);
 
-    public List<TranslationModel> getAll() {
-        return translationRepository.getAll()
-                .parallelStream()
-                .map(TranslationService::maptToTranslationModel)
-                .collect(Collectors.toList());
-    }
+    TranslationModel getById(long id);
 
-    public List<TranslationModel> getAllByCountryCode(final String countryCode) {
-        return translationRepository.getAllByCountryCode(countryCode)
-                .parallelStream()
-                .map(TranslationService::maptToTranslationModel)
-                .collect(Collectors.toList());
-    }
+    TranslationModel getByWordIdAndCountryCode(long wordId, String countryCode);
 
-    public TranslationModel getById(final long id) {
-        return translationRepository.getById(id)
-                .map(TranslationService::maptToTranslationModel)
-                .orElse(createEmptyTranslationModel());
-    }
+    TranslationModel updateTranslation(long translationId, TranslationCreateModel createModel);
 
-    public TranslationModel getByWordIdAndCountryCode(final long wordId, final String countryCode) {
-        return translationRepository.getByWordIdAndCountryCode(wordId, countryCode)
-                .map(TranslationService::maptToTranslationModel)
-                .orElse(createEmptyTranslationModel());
-    }
-
-    public TranslationModel maptToTranslationModel(TranslationCreateModel createModel) {
-        Translation translation = new Translation();
-        translation.setWordId(createModel.getWordId());
-        translation.setTranslation(createModel.getTranslation());
-        translation.setCountryCode(createModel.getCountryCode());
-        translationRepository.createTranslation(translation);
-
-        return translationRepository.getById(translation.getId())
-                .map(TranslationService::maptToTranslationModel)
-                .orElse(createEmptyTranslationModel());
-    }
-
-    public TranslationModel updateTranslation(final long translationId, final TranslationCreateModel createModel) {
-        Translation persistedTranslation = translationRepository.getById(translationId)
-                .orElseThrow(EntityNotFoundException::new);
-
-        persistedTranslation.setWordId(createModel.getWordId());
-        persistedTranslation.setTranslation(createModel.getTranslation());
-        persistedTranslation.setCountryCode(createModel.getCountryCode());
-        translationRepository.updateTranslation(persistedTranslation);
-
-        return maptToTranslationModel(persistedTranslation);
-    }
-
-    public void deleteTranslationById(final long translationId) {
-        translationRepository.deleteTranslation(translationId);
-    }
-
-    private static TranslationModel maptToTranslationModel(Translation translation) {
-        TranslationModel translationModel = new TranslationModel();
-        translationModel.setId(translation.getId());
-        translationModel.setWordId(translation.getWordId());
-        translationModel.setCountryCode(translation.getCountryCode());
-        translationModel.setTranslation(translation.getTranslation());
-        return translationModel;
-    }
-
-    private static TranslationModel createEmptyTranslationModel() {
-        return new TranslationModel(0, 0, UNKNOWN, UNKNOWN);
-    }
-
+    void deleteTranslationById(long translationId);
 }
