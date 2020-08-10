@@ -16,6 +16,8 @@ public interface TranslationService {
 
     TranslationModel getByWordIdAndCountryCode(long wordId, String countryCode);
 
+    TranslationModel createTranslation(TranslationCreateModel translationCreateModel);
+
     TranslationModel updateTranslation(long translationId, TranslationCreateModel createModel);
 
     void deleteTranslationById(long translationId);

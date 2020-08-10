@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface TranslationRepository {
 
-    @Results(id = "translation", value = {
+    @Results(id = "allTranslations", value = {
             @Result(property = "id", column = "id", id = true),
             @Result(property = "wordId", column = "word_id"),
             @Result(property = "countryCode", column = "country_code"),
@@ -20,7 +20,7 @@ public interface TranslationRepository {
     @Select("SELECT * FROM translations")
     List<Translation> getAll();
 
-    @Results(id = "translation", value = {
+    @Results(id = "AllTranslationsByCountryCode", value = {
             @Result(property = "id", column = "id", id = true),
             @Result(property = "wordId", column = "word_id"),
             @Result(property = "countryCode", column = "country_code"),
@@ -29,7 +29,7 @@ public interface TranslationRepository {
     @Select("SELECT * FROM translations WHERE country_code = #{countryCode}")
     List<Translation> getAllByCountryCode(@Param("countryCode") final String countryCode);
 
-    @Results(id = "translation", value = {
+    @Results(id = "allTranslationsByWordId", value = {
             @Result(property = "id", column = "id", id = true),
             @Result(property = "wordId", column = "word_id"),
             @Result(property = "countryCode", column = "country_code"),
@@ -38,7 +38,7 @@ public interface TranslationRepository {
     @Select("SELECT * FROM translations WHERE word_id = #{wordId}")
     List<Translation> getAllTByWordId(@Param("wordId") final long wordId);
 
-    @Results(id = "translation", value = {
+    @Results(id = "translationById", value = {
             @Result(property = "id", column = "id", id = true),
             @Result(property = "wordId", column = "word_id"),
             @Result(property = "countryCode", column = "country_code"),
@@ -47,7 +47,7 @@ public interface TranslationRepository {
     @Select("SELECT * FROM translations WHERE id = #{id}")
     Optional<Translation> getById(@Param("id") final long id);
 
-    @Results(id = "translation", value = {
+    @Results(id = "translationByWordIdAndCountryCode", value = {
             @Result(property = "id", column = "id", id = true),
             @Result(property = "wordId", column = "word_id"),
             @Result(property = "countryCode", column = "country_code"),

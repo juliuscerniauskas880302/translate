@@ -2,7 +2,9 @@ package com.newworld.hope.translateapp.controller;
 
 import com.newworld.hope.translateapp.model.WordCreateModel;
 import com.newworld.hope.translateapp.model.WordModel;
-import com.newworld.hope.translateapp.service.WordServiceImpl;
+import com.newworld.hope.translateapp.service.WordService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import org.apache.ibatis.annotations.Delete;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,50 +14,53 @@ import java.util.List;
 @RequestMapping("/words")
 public class WordController {
 
-    private final WordServiceImpl wordServiceImpl;
+    private final WordService wordService;
 
-    public WordController(WordServiceImpl wordServiceImpl) {
-        this.wordServiceImpl = wordServiceImpl;
+    public WordController(WordService wordService) {
+        this.wordService = wordService;
     }
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "authorization", value = "Bearer JWT Token", paramType = "header")
+    })
     @GetMapping()
     public List<WordModel> getAllWords() {
-        return wordServiceImpl.getAllWords();
+        return wordService.getAllWords();
     }
 
     @GetMapping("/all/{propertyName}")
     public List<WordModel> getWordsByPropertyName(@PathVariable("propertyName") final String propertyName) {
-        return wordServiceImpl.getWordsByPropertyName(propertyName);
+        return wordService.getWordsByPropertyName(propertyName);
     }
 
     @GetMapping("/one/{propertyName}")
     public WordModel getWordByPropertyName(@PathVariable("propertyName") final String propertyName) {
-        return wordServiceImpl.getWordByPropertyName(propertyName);
+        return wordService.getWordByPropertyName(propertyName);
     }
 
     @GetMapping("/{id}")
     public WordModel getWordById(@PathVariable("id") final long id) {
-        return wordServiceImpl.getWordById(id);
+        return wordService.getWordById(id);
     }
 
     @PostMapping(produces = "application/json", consumes = "application/json")
     public WordModel createWord(@RequestBody final WordCreateModel createModel) {
-        return wordServiceImpl.createWord(createModel);
+        return wordService.createWord(createModel);
     }
 
     @PutMapping("/{id}")
     public void updateWordById(@PathVariable("id") final long id, @RequestBody final WordCreateModel createModel) {
-        wordServiceImpl.updateWordById(id, createModel);
+        wordService.updateWordById(id, createModel);
     }
 
     @Delete("/id/{id}")
     public void deleteWordById(@PathVariable("id") final long id) {
-        wordServiceImpl.deleteWordById(id);
+        wordService.deleteWordById(id);
     }
 
     @Delete("/property/{propertyName}")
     public void deleteWordByPropertyName(@PathVariable("propertyName") final String propertyName) {
-        wordServiceImpl.deleteWordByPropertyName(propertyName);
+        wordService.deleteWordByPropertyName(propertyName);
     }
 
 }

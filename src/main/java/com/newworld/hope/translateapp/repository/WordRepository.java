@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 public interface WordRepository {
 
-    @Results(id = "wordById", value = {
+    @Results(id = "allWords", value = {
             @Result(property = "id", column = "id", id = true),
             @Result(property = "text", column = "text"),
             @Result(property = "description", column = "description"),
@@ -21,6 +21,12 @@ public interface WordRepository {
     @Select("SELECT * FROM words")
     List<Word> getAllWords();
 
+    @Results(id = "allWordsByPropertyName", value = {
+            @Result(property = "id", column = "id", id = true),
+            @Result(property = "text", column = "text"),
+            @Result(property = "description", column = "description"),
+            @Result(property = "propertyName", column = "property_name"),
+    })
     @Select("SELECT * FROM words " +
             "WHERE property_name " +
             "LIKE '%'#{propertyName}'%'")
@@ -36,7 +42,7 @@ public interface WordRepository {
             "WHERE id = #{id}")
     Optional<Word> getWordById(@Param("id") final long id);
 
-    @Results(id = "wordById", value = {
+    @Results(id = "wordByPropertyName", value = {
             @Result(property = "id", column = "id", id = true),
             @Result(property = "text", column = "text"),
             @Result(property = "description", column = "description"),

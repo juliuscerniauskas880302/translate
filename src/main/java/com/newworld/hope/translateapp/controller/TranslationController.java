@@ -2,7 +2,7 @@ package com.newworld.hope.translateapp.controller;
 
 import com.newworld.hope.translateapp.model.TranslationCreateModel;
 import com.newworld.hope.translateapp.model.TranslationModel;
-import com.newworld.hope.translateapp.service.TranslationServiceImpl;
+import com.newworld.hope.translateapp.service.TranslationService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,50 +11,50 @@ import java.util.List;
 @RequestMapping("/translations")
 public class TranslationController {
 
-    private TranslationServiceImpl translationServiceImpl;
+    private TranslationService translationService;
 
-    public TranslationController(TranslationServiceImpl translationServiceImpl) {
-        this.translationServiceImpl = translationServiceImpl;
+    public TranslationController(TranslationService translationService) {
+        this.translationService = translationService;
     }
 
     @GetMapping(produces = "application/json")
     public List<TranslationModel> getAllTranslations() {
-        return translationServiceImpl.getAll();
+        return translationService.getAll();
     }
 
     @GetMapping("/country/{countryCode}")
     public List<TranslationModel> getByCountryCode(@PathVariable("countryCode") final String countryCode) {
-        return translationServiceImpl.getAllByCountryCode(countryCode);
+        return translationService.getAllByCountryCode(countryCode);
     }
 
     @GetMapping("/wordId/{wordId}")
     public List<TranslationModel> getAllByWordId(@PathVariable("wordId") final long wordId) {
-        return translationServiceImpl.getAllTByWordId(wordId);
+        return translationService.getAllTByWordId(wordId);
     }
 
     @GetMapping("/id/{id}")
     public TranslationModel getById(@PathVariable("id") final long id) {
-        return translationServiceImpl.getById(id);
+        return translationService.getById(id);
     }
 
     @GetMapping("/word_id_country_code/{wordId}/{countryCode}")
     public TranslationModel getByWordIdAndCountryCode(@PathVariable final long wordId, @PathVariable final String countryCode) {
-        return translationServiceImpl.getByWordIdAndCountryCode(wordId, countryCode);
+        return translationService.getByWordIdAndCountryCode(wordId, countryCode);
     }
 
     @PostMapping()
     public TranslationModel createTranslation(@RequestBody final TranslationCreateModel translationCreateModel) {
-        return translationServiceImpl.createTranslation(translationCreateModel);
+        return translationService.createTranslation(translationCreateModel);
     }
 
     @PutMapping("/{id}")
     public TranslationModel updateTranslationById(@PathVariable final long id, @RequestBody final TranslationCreateModel translationCreateModel) {
-        return translationServiceImpl.updateTranslation(id, translationCreateModel);
+        return translationService.updateTranslation(id, translationCreateModel);
     }
 
     @DeleteMapping("/{id}")
     public void deleteTranslationById(@PathVariable final long id) {
-        translationServiceImpl.deleteTranslationById(id);
+        translationService.deleteTranslationById(id);
     }
 
 }
